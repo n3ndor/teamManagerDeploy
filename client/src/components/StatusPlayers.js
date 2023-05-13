@@ -7,13 +7,13 @@ const StatusPlayers = () => {
     const [selectedGame, setSelectedGame] = useState('gameOneStatus');
 
     useEffect(() => {
-        axios.get('http://localhost:8000/players')
+        axios.get('http://localhost:8000/api/players')
             .then(res => setPlayers(res.data))
             .catch(err => console.log(err));
     }, []);
 
     const handleStatusChange = (id, status) => {
-        axios.patch(`http://localhost:8000/players/${id}`, { [selectedGame]: status })
+        axios.patch(`http://localhost:8000/api/players/${id}`, { [selectedGame]: status })
             .then(res => {
                 setPlayers(players.map(player => player._id === id ? res.data : player));
             })

@@ -14,7 +14,7 @@ const UpdatePlayer = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/players/${id}`)
+        axios.get(`http://localhost:8000/api/players/${id}`)
             .then(res => {
                 setName(res.data.name);
                 setPreferredPosition(res.data.preferredPosition);
@@ -28,8 +28,8 @@ const UpdatePlayer = () => {
 
     const updatePlayer = e => {
         e.preventDefault();
-        axios.patch(`http://localhost:8000/players/${id}`, { name, preferredPosition, gameOneStatus, gameTwoStatus, gameThreeStatus })
-            .then(() => navigate('/players/list'))
+        axios.patch(`http://localhost:8000/api/players/${id}`, { name, preferredPosition, gameOneStatus, gameTwoStatus, gameThreeStatus })
+            .then(() => navigate('/api/players/list'))
             .catch(err => console.log(err));
     };
 

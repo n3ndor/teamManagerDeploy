@@ -7,13 +7,13 @@ const ListPlayers = () => {
     const [players, setPlayers] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/players')
+        axios.get('http://localhost:8000/api/players')
             .then(res => setPlayers(res.data))
             .catch(err => console.log(err));
     }, []);
 
     const deletePlayer = (id) => {
-        axios.delete(`http://localhost:8000/players/${id}`)
+        axios.delete(`http://localhost:8000/api/players/${id}`)
             .then(() => setPlayers(players.filter(player => player._id !== id)))
             .catch(err => console.log(err));
     };
@@ -33,7 +33,7 @@ const ListPlayers = () => {
                     <tbody>
                         {players.map((player) => (
                             <tr key={player._id}>
-                                <td><Link to={`/players/edit/${player._id}`} className="custom-text">{player.name}</Link></td>
+                                <td><Link to={`/api/players/edit/${player._id}`} className="custom-text">{player.name}</Link></td>
                                 <td className="custom-text">{player.preferredPosition}</td>
                                 <td><button onClick={() => deletePlayer(player._id)}>Delete</button></td>
                             </tr>

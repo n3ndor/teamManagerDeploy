@@ -6,10 +6,10 @@ const ManagePlayers = ({ setActiveTab }) => {
     return (
         <Nav className="sticky-top">
             <Nav.Item>
-                <Nav.Link as={Link} to="/players/list" onClick={() => setActiveTab('list')}><span>List</span> </Nav.Link>
+                <Nav.Link as={Link} to="/api/players/list" onClick={() => setActiveTab('list')}><span>List</span> </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link as={Link} to="/players/addplayer" onClick={() => setActiveTab('addplayer')}><span>Add Player</span> </Nav.Link>
+                <Nav.Link as={Link} to="/api/players/addplayer" onClick={() => setActiveTab('addplayer')}><span>Add Player</span> </Nav.Link>
             </Nav.Item>
         </Nav>
     );

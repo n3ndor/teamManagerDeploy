@@ -13,10 +13,10 @@ const AddPlayer = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/players', player)
+        axios.post('http://localhost:8000/api/players', player)
             .then(res => {
                 console.log(res.data);
-                navigate('/players/list');
+                navigate('/api/players/list');
             })
             .catch(err => console.log(err));
     }
