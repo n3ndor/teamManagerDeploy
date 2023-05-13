@@ -29,7 +29,7 @@ const getOnePlayer = (req, res) => {
 const deletePlayer = (req, res) => {
     Player.deleteOne({ _id: req.params.id })
         .then((result) => res.json(result))
-        .catch((err) => err.status(400).json(err));
+        .catch((err) => res.status(400).json(err));
 };
 
 const updatePlayer = (req, res) => {

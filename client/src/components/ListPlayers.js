@@ -33,7 +33,7 @@ const ListPlayers = () => {
                     <tbody>
                         {players.map((player) => (
                             <tr key={player._id}>
-                                <td><Link to={`/api/players/edit/${player._id}`} className="custom-text">{player.name}</Link></td>
+                                <td><Link to={`/players/edit/${player._id}`} className="custom-text">{player.name}</Link></td>
                                 <td className="custom-text">{player.preferredPosition}</td>
                                 <td><button onClick={() => deletePlayer(player._id)}>Delete</button></td>
                             </tr>

@@ -16,7 +16,7 @@ const AddPlayer = () => {
         axios.post('http://localhost:8000/api/players', player)
             .then(res => {
                 console.log(res.data);
-                navigate('/api/players/list');
+                navigate('/players/list');
             })
             .catch(err => console.log(err));
     }
