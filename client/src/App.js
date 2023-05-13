@@ -17,7 +17,7 @@ function App() {
         <nav>
           <ul>
             <li><Link to="/api/players/list"><span>Manage Players</span> </Link></li>
-            <li><Link to="/status/game/:id"><span>Manage Status</span> </Link></li>
+            <li><Link to="/api/status/game/:id"><span>Manage Status</span> </Link></li>
           </ul>
         </nav>
         <Routes>
