@@ -47,15 +47,29 @@ h1 {
   color: #198754;
 }
 
-span {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 Button {
   margin: 0 10px 10px 0;
 }
 
+ul {
+  display: flex;
+
+  gap: 50px;
+}
+
 li {
   list-style: none;
+}
+
+span {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+
+}
+
+span:hover {
+  transform: scale(1.8) rotate(-2deg);
+  color: red;
 }

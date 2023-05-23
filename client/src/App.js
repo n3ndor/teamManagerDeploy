@@ -18,6 +18,7 @@ function App() {
           <ul>
             <li><Link to="/players/list"><span>Manage Players</span> </Link></li>
             <li><Link to="/status/games"><span>Manage Status</span> </Link></li>
+            <li><Link to="/chat"><span>Chat-App</span> </Link></li>
           </ul>
         </nav>
         <Routes>
