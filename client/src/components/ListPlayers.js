@@ -3,14 +3,27 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 
-const ListPlayers = () => {
+const ListPlayers = ({ activeTab, token }) => {
     const [players, setPlayers] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/players')
-            .then(res => setPlayers(res.data))
-            .catch(err => console.log(err));
-    }, []);
+        async function fetchPlayers() {
+            try {
+                const res = await axios.get('/api/players', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setPlayers(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        if (activeTab === "list") {
+            fetchPlayers();
+        }
+    }, [activeTab, token]);
 
     const deletePlayer = (id) => {
         axios.delete(`http://localhost:8000/api/players/${id}`)

@@ -26,7 +26,7 @@ const configureSocketIO = (server, corsOptions) => {
 
         socket.on('disconnect', () => {
             console.log('User disconnected');
-            socket.broadcast.emit('message', { user: 'admin', text: 'A user has left the chat.' });
+            socket.broadcast.emit('message', { user: 'Chat info', text: 'A user has left the chat.' });
         });
     });
 

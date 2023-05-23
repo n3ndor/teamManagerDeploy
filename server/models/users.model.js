@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+require("bcrypt")
 
 const UserSchema = mongoose.Schema({
     fullName: {
@@ -9,6 +10,7 @@ const UserSchema = mongoose.Schema({
     userName: {
         type: String,
         required: [true, "User Name is required"],
+        minlength: [2, "User Name must be at least 2 characters long"],
         unique: true,
     },
     email: {
@@ -18,7 +20,7 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, "Password is required"],
-        minlength: [8, "Password must be 8 characters or longer"]
+        minlength: [6, "Password must be 6 characters or longer"]
     }
 }, { timestamps: true });
 

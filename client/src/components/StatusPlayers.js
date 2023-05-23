@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button } from 'react-bootstrap';
 
-const StatusPlayers = () => {
+
+const StatusPlayers = ({ isAuthenticated }) => {
     const [players, setPlayers] = useState([]);
     const [selectedGame, setSelectedGame] = useState('gameOneStatus');
+    const buttonStyle = isAuthenticated ? {} : { pointerEvents: 'none', opacity: '1' };
+
+    const handleButtonClick = (playerId, status) => {
+        if (isAuthenticated) {
+            handleStatusChange(playerId, status);
+        }
+    };
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/players')
@@ -41,9 +49,37 @@ const StatusPlayers = () => {
                             <tr key={player._id}>
                                 <td className="custom-text">{player.name}</td>
                                 <td>
-                                    <Button variant={player[selectedGame] === 'Playing' ? 'success' : 'outline-success'} onClick={() => handleStatusChange(player._id, 'Playing')}>Playing</Button>
-                                    <Button variant={player[selectedGame] === 'Not Playing' ? 'danger' : 'outline-danger'} onClick={() => handleStatusChange(player._id, 'Not Playing')}>Not Playing</Button>
-                                    <Button variant={player[selectedGame] === 'Undecided' ? 'warning' : 'outline-warning'} onClick={() => handleStatusChange(player._id, 'Undecided')}>Undecided</Button>
+                                    {isAuthenticated ? (
+                                        <>
+                                            <Button variant={player[selectedGame] === 'Playing' ? 'success' : 'outline-success'} onClick={() => handleStatusChange(player._id, 'Playing')}>Playing</Button>
+                                            <Button variant={player[selectedGame] === 'Not Playing' ? 'danger' : 'outline-danger'} onClick={() => handleStatusChange(player._id, 'Not Playing')}>Not Playing</Button>
+                                            <Button variant={player[selectedGame] === 'Undecided' ? 'warning' : 'outline-warning'} onClick={() => handleStatusChange(player._id, 'Undecided')}>Undecided</Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                style={buttonStyle}
+                                                variant={player[selectedGame] === 'Playing' ? 'success' : 'outline-success'}
+                                                onClick={() => handleButtonClick(player._id, 'Playing')}
+                                            >
+                                                Playing
+                                            </Button>
+                                            <Button
+                                                style={buttonStyle}
+                                                variant={player[selectedGame] === 'Not Playing' ? 'danger' : 'outline-danger'}
+                                                onClick={() => handleButtonClick(player._id, 'Not Playing')}
+                                            >
+                                                Not Playing
+                                            </Button>
+                                            <Button
+                                                style={buttonStyle}
+                                                variant={player[selectedGame] === 'Undecided' ? 'warning' : 'outline-warning'}
+                                                onClick={() => handleButtonClick(player._id, 'Undecided')}
+                                            >
+                                                Undecided
+                                            </Button>
+                                        </>
+                                    )}
                                 </td>
                             </tr>
                         ))}
