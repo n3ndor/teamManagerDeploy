@@ -5,7 +5,6 @@ const app = express();
 const http = require('http');
 const playerRoutes = require('./routes/players.routes');
 const userRoutes = require('./routes/users.routes');
-
 const { expressjwt } = require('express-jwt');
 const corsConfig = require('./config/cors.config');
 const jwtError = require('./middlewares/jwtError');
@@ -13,7 +12,7 @@ const configureSocketIO = require('./config/socket.config');
 
 app.use(express.json());
 app.use(corsConfig);
-app.use(expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }).unless({ path: ['/auth', '/api/players'] }));
+app.use(expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }).unless({ path: ['/api/register', '/api/login'] }));
 app.use(jwtError);
 
 playerRoutes(app);
@@ -31,6 +30,11 @@ const io = configureSocketIO(server, corsConfig);
 app.use((error, req, res, next) => {
     console.error(error);
     res.status(500).json({ message: 'An error occurred' });
+});
+
+app.use(function (req, res, next) {
+    console.log(req.headers);
+    next();
 });
 
 const port = process.env.PORT || 8000;

@@ -9,7 +9,7 @@ const ListPlayers = ({ activeTab, token }) => {
     useEffect(() => {
         async function fetchPlayers() {
             try {
-                const res = await axios.get('/api/players', {
+                const res = await axios.get('http://localhost:8000/api/players', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -19,11 +19,9 @@ const ListPlayers = ({ activeTab, token }) => {
                 console.error(err);
             }
         }
+        fetchPlayers();
 
-        if (activeTab === "list") {
-            fetchPlayers();
-        }
-    }, [activeTab, token]);
+    }, [token]);
 
     const deletePlayer = (id) => {
         axios.delete(`http://localhost:8000/api/players/${id}`)

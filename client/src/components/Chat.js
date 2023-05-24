@@ -6,7 +6,7 @@ const CONNECTION_PORT = 'localhost:8000/';
 
 function Chat() {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [username, setUsername] = useState("");
+    const [userName, setUserName] = useState("");
     const [message, setMessage] = useState("");
     const [messageList, setMessageList] = useState([]);
 
@@ -27,18 +27,18 @@ function Chat() {
     // Join the chatroom
     const connectToRoom = () => {
         setLoggedIn(true);
-        socket.emit("join", { username });
+        socket.emit("join", { userName });
     };
 
     const logOut = () => {
         setLoggedIn(false);
-        setUsername("");
+        setUserName("");
         setMessageList([]);
     };
 
     const sendMessage = async () => {
         let messageContent = {
-            user: username,
+            user: userName,
             text: message,
         };
 
@@ -52,14 +52,14 @@ function Chat() {
             {!loggedIn ? (
                 <div className="logIn">
                     <div>
-                        <input type="text" placeholder="Name..." onChange={(e) => { setUsername(e.target.value); }} />
+                        <input type="text" placeholder="Name..." onChange={(e) => { setUserName(e.target.value); }} />
                         <button onClick={connectToRoom}>Enter Chat</button>
                     </div>
                 </div>
             ) : (
                 <div className="chatContainer">
                     <div className="userHeader">
-                        <h2>Welcome, {username}!</h2>
+                        <h2>Welcome, {userName}!</h2>
                         <button onClick={logOut}>Log Out</button>
                     </div>
                     <div className="messages">

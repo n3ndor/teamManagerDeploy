@@ -4,20 +4,17 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res, next) => {
-    const { username, password } = req.body;
+    const { fullName, userName, email, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ userName });
+        console.log(req.body);
         if (user) {
             return res.status(400).send('User already exists');
         }
 
-        const newUser = new User({ username, password });
+        const newUser = new User({ fullName, userName, email, password });
         await newUser.save();
-
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, { httpOnly: true });
-        res.json(newUser);
 
         createTokenAndSend(newUser, res);
     } catch (error) {
@@ -26,22 +23,18 @@ const registerUser = async (req, res, next) => {
 };
 
 const loginUser = async (req, res, next) => {
-    const { username, password } = req.body;
+    const { userName, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ userName });
         if (!user) {
-            return res.status(400).send('Invalid username or password');
+            return res.status(400).send('Invalid User Name or Password');
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.status(400).send('Invalid username or password');
+            return res.status(400).send('Invalid User Name or Password');
         }
-
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, { httpOnly: true });
-        res.json(user);
 
         createTokenAndSend(user, res);
     } catch (error) {

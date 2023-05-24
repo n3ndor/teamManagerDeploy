@@ -6,7 +6,9 @@ function createTokenAndSend(user, res) {
 
     // Send back token and user
     res.cookie('token', token, { httpOnly: true });
-    res.json(user);
+    user = user.toObject();
+    delete user['password'];
+    res.json({ user: user, token: token });
 }
 
 module.exports = createTokenAndSend;

@@ -44,7 +44,7 @@ function App() {
           <Route path="/status/games" element={<StatusPlayers isAuthenticated={isAuthenticated} />} />
           {token ? (
             <>
-              <Route path="/players/list" element={<ManagePlayers />} />
+              <Route path="/players/manage" element={<ManagePlayers />} />
               <Route path="/players/list" element={<ListPlayers token={token} />} />
               <Route path="/players/addplayer" element={<AddPlayer />} />
               <Route path="/players/edit/:id" element={<UpdatePlayer />} />

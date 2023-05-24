@@ -7,14 +7,14 @@ const configureSocketIO = (server, corsOptions) => {
     io.on('connection', (socket) => {
         console.log('New WebSocket connection');
 
-        socket.on('join', async ({ username }) => {
-            console.log(`${username} joined the chat`);
+        socket.on('join', async ({ userName }) => {
+            console.log(`${userName} joined the chat`);
 
             let messages = await Message.find();
             socket.emit('chat history', messages);
 
-            socket.emit('message', { user: 'Chat info', text: `${username}, welcome to the chat!` });
-            socket.broadcast.emit('message', { user: 'Chat info', text: `${username} has joined the chat!` });
+            socket.emit('message', { user: 'Chat info', text: `${userName}, welcome to the chat!` });
+            socket.broadcast.emit('message', { user: 'Chat info', text: `${userName} has joined the chat!` });
         });
 
         socket.on('sendMessage', async (message) => {
