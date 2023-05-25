@@ -28,9 +28,11 @@ const UpdatePlayer = () => {
 
     const updatePlayer = e => {
         e.preventDefault();
-        axios.patch(`http://localhost:8000/api/players/${id}`, { name, preferredPosition, gameOneStatus, gameTwoStatus, gameThreeStatus })
+        axios.patch(`http://localhost:8000/api/players/${id}`, {
+            name, preferredPosition, gameOneStatus, gameTwoStatus, gameThreeStatus
+        })
             .then(() => navigate('/players/list'))
-            .catch(err => console.log(err));
+            .catch(err => console.log(err.response));
     };
 
     if (loading) {

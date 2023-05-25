@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
-
+import './App.css';
 import ManagePlayers from './components/ManagePlayers';
 import ListPlayers from './components/ListPlayers';
 import AddPlayer from './components/AddPlayer';
@@ -9,7 +9,6 @@ import UpdatePlayer from './components/UpdatePlayer';
 import Chat from "./components/Chat";
 import Login from './components/Login';
 import Register from './components/Register';
-import './App.css';
 
 function App() {
   const [token, setToken] = useState(null);
@@ -45,9 +44,9 @@ function App() {
           {token ? (
             <>
               <Route path="/players/manage" element={<ManagePlayers />} />
-              <Route path="/players/list" element={<ListPlayers token={token} />} />
-              <Route path="/players/addplayer" element={<AddPlayer />} />
-              <Route path="/players/edit/:id" element={<UpdatePlayer />} />
+              <Route path="/players/list" element={<><ManagePlayers /><ListPlayers token={token} /></>} />
+              <Route path="/players/addplayer" element={<><ManagePlayers /><AddPlayer /></>} />
+              <Route path="/players/edit/:id" element={<><ManagePlayers /><UpdatePlayer /></>} />
               <Route path="/chat" element={<Chat />} />
             </>
           ) : (
