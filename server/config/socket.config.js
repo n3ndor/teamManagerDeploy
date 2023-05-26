@@ -1,32 +1,36 @@
 const socketio = require('socket.io');
-const Message = require('../models/messages.model');
+const Message = require("../models/messages.model")
 
-const configureSocketIO = (server, corsOptions) => {
-    const io = socketio(server, { cors: corsOptions });
+const socketCorsOptions = {
+    origin: true,
+    methods: ["GET", "POST"],
+    credentials: true
+};
+
+const configureSocketIO = (server) => {
+    const io = socketio(server, { cors: socketCorsOptions });
 
     io.on('connection', (socket) => {
         console.log('New WebSocket connection');
 
-        socket.on('join', async ({ userName }) => {
+        socket.on('joinChat', async ({ userName }) => {
             console.log(`${userName} joined the chat`);
 
             let messages = await Message.find();
-            socket.emit('chat history', messages);
+            console.log('Emitting chatHistory with', messages);
+            socket.emit('chatHistory', messages);
 
-            socket.emit('message', { user: 'Chat info', text: `${userName}, welcome to the chat!` });
-            socket.broadcast.emit('message', { user: 'Chat info', text: `${userName} has joined the chat!` });
+            socket.emit('chatMessage', { user: 'Chat Admin', text: `${userName}, welcome to the chat!` });
+            socket.broadcast.emit('chatMessage', { user: 'Chat Admin', text: `${userName} has joined the chat!` });
         });
 
-        socket.on('sendMessage', async (message) => {
-            let newMessage = new Message(message);
-            await newMessage.save();
-
-            io.emit('message', { user: message.user, text: message.text });
+        socket.on('sendChatMessage', (message) => {
+            io.emit('chatMessage', { user: message.user, text: message.text });
         });
 
-        socket.on('disconnect', () => {
-            console.log('User disconnected');
-            socket.broadcast.emit('message', { user: 'Chat info', text: 'A user has left the chat.' });
+        socket.on('leaveChat', ({ userName }) => {
+            console.log(`${userName} logged out`);
+            io.emit('chatMessage', { user: 'Chat Admin', text: `${userName} has left the chat.` });
         });
     });
 

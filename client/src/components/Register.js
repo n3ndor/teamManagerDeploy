@@ -3,25 +3,30 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 
-const Register = ({ onRegister }) => {
+const Register = ({ onRegister, setUser }) => {
     const [fullName, setFullName] = useState("");
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
         try {
             const res = await axios.post('http://localhost:8000/api/register', { fullName, userName, email, password });
-            onRegister(res.data.token);
+            onRegister(res.data.token, res.data.user);
+            setUser(res.data.user);
             navigate('/login');
         } catch (error) {
-            console.error(error);
-            // Inspect the error object and use the error message from the server.
-            if (error.response && error.response.data) {
-                setError(error.response.data);
+            if (error.response && error.response.data && error.response.data.errors) {
+                const validationErrors = Object.values(error.response.data.errors).map(err => err.message);
+                setError(validationErrors.join('. '));
             } else {
                 setError("An unexpected error occurred. Please try again.");
             }
@@ -48,6 +53,14 @@ const Register = ({ onRegister }) => {
                     <Form.Group>
                         <Form.Label>Password: *</Form.Label>
                         <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Confirm Password: *</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
                     </Form.Group>
                     <br />
                     {error && <p className='text-danger'>{error}</p>}

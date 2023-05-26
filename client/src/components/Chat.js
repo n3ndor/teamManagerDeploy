@@ -1,85 +1,81 @@
 import React, { useEffect, useState } from 'react';
+import { Button, Container, Form, Row, Col } from 'react-bootstrap';
 import io from 'socket.io-client';
 
-let socket;
 const CONNECTION_PORT = 'localhost:8000/';
 
-function Chat() {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [userName, setUserName] = useState("");
+function Chat({ userName }) {
     const [message, setMessage] = useState("");
     const [messageList, setMessageList] = useState([]);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        socket = io(CONNECTION_PORT);
+        const socketIOClient = io(CONNECTION_PORT);
+        setSocket(socketIOClient);
 
-        //oldMessages
-        socket.on("chat history", (data) => {
-            setMessageList(data);
+        socketIOClient.on('chatHistory', (history) => {
+            console.log('Received chatHistory with', history);
+            setMessageList(history);
         });
 
-        //newMessages
-        socket.on("message", (data) => {
-            setMessageList((newMessages) => [...newMessages, data]);
+        socketIOClient.on('chatMessage', (data) => {
+            setMessageList((oldMessages) => [...oldMessages, data]);
         });
-    }, []);
 
-    // Join the chatroom
-    const connectToRoom = () => {
-        setLoggedIn(true);
-        socket.emit("join", { userName });
-    };
+        // Emit joinChat event after setting up the socket connection
+        if (userName) {
+            socketIOClient.emit('joinChat', { userName });
+        }
 
-    const logOut = () => {
-        setLoggedIn(false);
-        setUserName("");
-        setMessageList([]);
-    };
-
-    const sendMessage = async () => {
-        let messageContent = {
-            user: userName,
-            text: message,
+        // Cleanup on unmount
+        return () => {
+            if (userName) {
+                socketIOClient.emit('leaveChat', { userName });
+            }
+            socketIOClient.disconnect();
         };
+    }, [userName]);
 
-        setMessage("");
+    const sendMessage = () => {
+        if (socket) {
+            let messageContent = {
+                user: userName,
+                text: message,
+            };
 
-        socket.emit("sendMessage", messageContent);
+            setMessage("");
+
+            socket.emit("sendChatMessage", messageContent);
+        }
     };
 
     return (
-        <div className="Chat">
-            {!loggedIn ? (
-                <div className="logIn">
-                    <div>
-                        <input type="text" placeholder="Name..." onChange={(e) => { setUserName(e.target.value); }} />
-                        <button onClick={connectToRoom}>Enter Chat</button>
-                    </div>
-                </div>
-            ) : (
-                <div className="chatContainer">
-                    <div className="userHeader">
-                        <h2>Welcome, {userName}!</h2>
-                        <button onClick={logOut}>Log Out</button>
-                    </div>
-                    <div className="messages">
-                        {messageList.map((val, key) => {
-                            return (
-                                <div className="messageContainer" key={key}>
-                                    <div className="messageIndividual">
-                                        {val.user}: {val.text}
-                                    </div>
+        <Container className="d-flex justify-content-center align-items-start custom-container">
+            <div className='custom-box'>
+                <h2>Welcome, {userName}!</h2>
+                <div className="messages">
+                    {messageList.map((val, key) => {
+                        return (
+                            <div className="messageContainer" key={key}>
+                                <div className="messageIndividual">
+                                    {val.user}: {val.text}
                                 </div>
-                            );
-                        })}
-                    </div>
-                    <div className="messageInputs">
-                        <input type="text" placeholder="Message..." value={message} onChange={(e) => { setMessage(e.target.value); }} />
-                        <button onClick={sendMessage}>Send</button>
-                    </div>
+                            </div>
+                        );
+                    })}
                 </div>
-            )}
-        </div>
+                <Form>
+                    <Form.Group as={Row}>
+                        <Col sm={10}>
+                            <Form.Control type="text" placeholder="Message..." value={message} onChange={(e) => { setMessage(e.target.value); }} />
+                        </Col>
+                        <Col sm={2}>
+                            <Button onClick={sendMessage}>Send</Button>
+                        </Col>
+                    </Form.Group>
+                </Form>
+            </div>
+        </Container>
     );
 }
 

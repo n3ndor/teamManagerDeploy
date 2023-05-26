@@ -1,5 +1,3 @@
-const cors = require('cors');
-
 const corsOptions = {
     origin: true,
     credentials: true,
@@ -7,4 +5,4 @@ const corsOptions = {
     allowedHeaders: ["*"]
 };
 
-module.exports = cors(corsOptions);
+module.exports = corsOptions;

@@ -6,12 +6,13 @@ const http = require('http');
 const playerRoutes = require('./routes/players.routes');
 const userRoutes = require('./routes/users.routes');
 const { expressjwt } = require('express-jwt');
-const corsConfig = require('./config/cors.config');
+const cors = require('cors');
+const corsOptions = require('./config/cors.config');
 const jwtError = require('./middlewares/jwtError');
 const configureSocketIO = require('./config/socket.config');
 
 app.use(express.json());
-app.use(corsConfig);
+app.use(cors(corsOptions));
 app.use(expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }).unless({ path: ['/api/register', '/api/login'] }));
 app.use(jwtError);
 
@@ -25,11 +26,14 @@ app.get('/', (req, res) => {
 require('./config/mongoose.config');
 
 const server = http.createServer(app);
-const io = configureSocketIO(server, corsConfig);
+const io = configureSocketIO(server);
 
-app.use((error, req, res, next) => {
-    console.error(error);
-    res.status(500).json({ message: 'An error occurred' });
+app.use((err, req, res, next) => {
+    if (err.name === 'ValidationError') {
+        res.status(400).json({ errors: err.errors });
+    } else {
+        res.status(500).json({ message: "An unexpected error occurred. Please try again." });
+    }
 });
 
 app.use(function (req, res, next) {

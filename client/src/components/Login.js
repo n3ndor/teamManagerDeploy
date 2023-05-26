@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Container, Form, Button } from 'react-bootstrap';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, setUser }) => {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -20,10 +20,12 @@ const Login = ({ onLogin }) => {
                 setError(res.data.error);
             } else {
                 // On successful login
-                onLogin(res.data.token);
-                console.log(res.data.user);
-                // set the authorization header for axios
+                onLogin(res.data.token, res.data.user);
+                setUser(res.data.user);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+                // Store user and token in local storage
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
                 navigate('/players/list');
             }
         } catch (error) {

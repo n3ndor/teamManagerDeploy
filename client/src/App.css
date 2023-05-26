@@ -17,7 +17,7 @@
 }
 
 .custom-container {
-  width: 90%;
+  width: 85%;
   padding: 20px;
 
 }
@@ -41,9 +41,12 @@
 .custom-text,
 .custom-box,
 span,
-h1 {
+h1,
+h2 {
   color: rgb(196, 238, 46);
-  text-shadow: 5px 5px 5px black
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8), -1px -1px 3px rgba(0, 0, 0, 0.8);
+  /* text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5) */
+
 }
 
 h1 {
