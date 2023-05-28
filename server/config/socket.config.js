@@ -24,8 +24,19 @@ const configureSocketIO = (server) => {
             socket.broadcast.emit('chatMessage', { user: 'Chat Admin', text: `${userName} has joined the chat!` });
         });
 
-        socket.on('sendChatMessage', (message) => {
+        socket.on('sendChatMessage', async (message) => {
             io.emit('chatMessage', { user: message.user, text: message.text });
+            // Create a new message instance
+            const newMessage = new Message({
+                user: message.user,
+                text: message.text,
+            });
+            // Save the message
+            try {
+                await newMessage.save();
+            } catch (err) {
+                console.log("Error while saving the message: ", err);
+            }
         });
 
         socket.on('leaveChat', ({ userName }) => {

@@ -57,7 +57,7 @@ function Chat({ userName }) {
                     {messageList.map((val, key) => {
                         return (
                             <div className="messageContainer" key={key}>
-                                <div className="messageIndividual">
+                                <div className="messageIndividual" style={{ color: val.user === 'Chat Admin' ? 'red' : 'auto' }}>
                                     {val.user}: {val.text}
                                 </div>
                             </div>

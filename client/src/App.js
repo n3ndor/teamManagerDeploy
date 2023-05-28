@@ -57,13 +57,14 @@ function App() {
           <ul>
             <li><Link to="/players/list"><span>Manage Players</span></Link></li>
             <li><Link to="/status/games"><span>Manage Status</span></Link></li>
+
             <li><Link to="/chat"><span>Chat-App</span></Link></li>
           </ul>
         </nav>
         <Routes>
           <Route path="/login" element={<Login onLogin={handleLogin} setUser={setUser} socket={socket} setSocket={setSocket} />} />
           <Route path="/register" element={<Register onRegister={handleLogin} setUser={setUser} />} />
-          <Route path="/status/games" element={<StatusPlayers isAuthenticated={isAuthenticated} />} />
+          <Route path="/status/games" element={<StatusPlayers token={token} isAuthenticated={isAuthenticated} />} />
           {token ? (
             <>
               <Route path="/players/manage" element={<ManagePlayers />} />

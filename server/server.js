@@ -13,7 +13,7 @@ const configureSocketIO = require('./config/socket.config');
 
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use(expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }).unless({ path: ['/api/register', '/api/login'] }));
+app.use(expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }).unless({ path: ['/api/register', '/api/login', '/api/players'] }));
 app.use(jwtError);
 
 playerRoutes(app);
@@ -37,7 +37,6 @@ app.use((err, req, res, next) => {
 });
 
 app.use(function (req, res, next) {
-    console.log(req.headers);
     next();
 });
 
