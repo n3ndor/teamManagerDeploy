@@ -14,3 +14,12 @@ The deployment of the project is on an AWS server, ensuring scalability, reliabi
   - CRUD (Create, Read, Update, Delete) functionality
   - Real-time chat feature using socket.io
 - Deployment: AWS server (ensures scalability, reliability, and robust performance)
+
+Landing Page
+![Landing](https://github.com/n3ndor/teamManagerDeploy/raw/main/printscreens/landing.png) 
+Manage Players Page
+![Manage Players](https://github.com/n3ndor/teamManagerDeploy/raw/main/printscreens/manage%20players.png)
+Update Players page
+![Update Player](https://github.com/n3ndor/teamManagerDeploy/raw/main/printscreens/update%20player.png)
+Real-time chat with socket.io
+![Chat App](https://github.com/n3ndor/teamManagerDeploy/raw/main/printscreens/chat-app.png)
