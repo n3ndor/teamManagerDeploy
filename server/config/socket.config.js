@@ -17,7 +17,6 @@ const configureSocketIO = (server) => {
             console.log(`${userName} joined the chat`);
 
             let messages = await Message.find();
-            console.log('Emitting chatHistory with', messages);
             socket.emit('chatHistory', messages);
 
             socket.emit('chatMessage', { user: 'Chat Admin', text: `${userName}, welcome to the chat!` });
